@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package user;
+option go_package="./user";
+
+
+message UserInfo {
+  int64 UserId  = 1;        // 主键id
+  string Avatar = 2;     // 头像链接地址
+  string Nickname  = 3;  // 昵称
+  string Account    = 4; // 账号
+  string Password  = 5; // 密码
+  string Bio       = 6; // 个人简介 Biography
+  int64 Gender     = 7; // 性别 0 女 1 男 2 未知
+  string Region     = 8; // 地区
+  int64 CreatedAt = 9; // 创建时间
+  int64 UpdatedAt = 10; //更新时间
+}
+
+message RegisterReq {
+  string Account = 1; // 自定义账号
+  string Password = 2; // 密码
+}
+message RegisterResp {
+  int64 UserId = 1; //
+}
+
+message LoginReq {
+  string Account = 1; // 自定义账号
+  string Password = 2; // 密码
+}
+message LoginResp {}
+
+message CancellationReq {
+  string UserId = 1; // 自定义账号
+}
+message CancellationResp {}
+
+message GetUsersReq {
+  string UserId = 1; // 自定义账号
+}
+message GetUsersResp {
+  UserInfo UserInfo = 1;
+}
+
+message UpdateUserReq {
+  UserInfo UserInfo = 1;
+}
+message UpdateUserResp {}
+
+service User {
+  // 注册
+  rpc Register(RegisterReq) returns(RegisterResp);
+  // 登录
+  rpc Login(LoginReq) returns(LoginResp);
+  // 注销
+  rpc Cancellation(CancellationReq) returns(CancellationResp);
+  // 查用户信息
+  rpc GetUsers(GetUsersReq) returns(GetUsersResp);
+  // 更新用户信息
+  rpc UpdateUser(UpdateUserReq) returns(UpdateUserResp);
+}
