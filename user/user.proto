@@ -22,7 +22,7 @@ message RegisterReq {
   string Password = 2; // 密码
 }
 message RegisterResp {
-  int64 UserId = 1; //
+  int64 UserId = 1; // 用户ID
 }
 
 message LoginReq {
