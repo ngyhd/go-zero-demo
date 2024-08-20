@@ -10,11 +10,12 @@ message UserInfo {
   string Nickname  = 3;  // 昵称
   string Account    = 4; // 账号
   string Password  = 5; // 密码
-  string Bio       = 6; // 个人简介 Biography
+  optional string Bio       = 6; // 个人简介 Biography
   int64 Gender     = 7; // 性别 0 女 1 男 2 未知
   string Region     = 8; // 地区
-  int64 CreatedAt = 9; // 创建时间
-  int64 UpdatedAt = 10; //更新时间
+  int64 Status     = 9; // 地区
+  int64 CreatedAt = 10; // 创建时间
+  int64 UpdatedAt = 11; //更新时间
 }
 
 message RegisterReq {
@@ -29,15 +30,17 @@ message LoginReq {
   string Account = 1; // 自定义账号
   string Password = 2; // 密码
 }
-message LoginResp {}
+message LoginResp {
+  string SessionId = 1; // 用户登录标识
+}
 
 message CancellationReq {
-  string UserId = 1; // 自定义账号
+  int64 UserId = 1; // 用户ID
 }
 message CancellationResp {}
 
 message GetUsersReq {
-  string UserId = 1; // 自定义账号
+  int64 UserId = 1; // 用户ID
 }
 message GetUsersResp {
   UserInfo UserInfo = 1;

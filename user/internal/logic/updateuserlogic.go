@@ -2,7 +2,11 @@ package logic
 
 import (
 	"context"
+	"github.com/pkg/errors"
+	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"go-zero-demo/user/user"
+	"google.golang.org/grpc/status"
+	"time"
 
 	"go-zero-demo/user/internal/svc"
 
@@ -25,7 +29,36 @@ func NewUpdateUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Update
 
 // 更新用户信息
 func (l *UpdateUserLogic) UpdateUser(in *user.UpdateUserReq) (*user.UpdateUserResp, error) {
-	// todo: add your logic here and delete this line
+	findOne, err := l.svcCtx.DB.User.FindOne(l.ctx, in.GetUserInfo().GetUserId())
+	if err != nil {
+		if errors.Is(err, sqlx.ErrNotFound) {
+			return nil, status.Error(400, "账号不存在")
+		} else {
+			return nil, status.Error(500, "系统错误")
+		}
+	}
+	if in.GetUserInfo().GetAvatar() != "" {
+		findOne.Avatar = in.GetUserInfo().GetAvatar()
+	}
+	if in.GetUserInfo().GetNickname() != "" {
+		findOne.Avatar = in.GetUserInfo().GetNickname()
+	}
 
+	if in.GetUserInfo().Bio != nil {
+		findOne.Bio = in.GetUserInfo().GetBio()
+	}
+
+	if in.GetUserInfo().GetGender() != 0 {
+		findOne.Gender = in.GetUserInfo().GetGender()
+	}
+	if in.GetUserInfo().GetRegion() != "" {
+		findOne.Region = in.GetUserInfo().GetRegion()
+	}
+	findOne.UpdatedAt = time.Now().Unix()
+
+	err = l.svcCtx.DB.User.Update(l.ctx, findOne)
+	if err != nil {
+		return nil, status.Error(500, "系统错误")
+	}
 	return &user.UpdateUserResp{}, nil
 }
