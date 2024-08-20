@@ -2,11 +2,14 @@ package logic
 
 import (
 	"context"
+	"crypto/md5"
 	"errors"
+	"fmt"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"go-zero-demo/user/internal/svc"
 	"go-zero-demo/user/user"
 	"google.golang.org/grpc/status"
+	"time"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -50,6 +53,12 @@ func (l *LoginLogic) Login(in *user.LoginReq) (*user.LoginResp, error) {
 			return nil, status.Error(500, "系统错误")
 		}
 	}
-	// TODO 登录态处理, 返回用户标识，并存储
-	return &user.LoginResp{}, nil
+	// 随机生成一个sessionId
+	data := []byte(account.Password + time.Now().String())
+	hash := md5.Sum(data)
+
+	l.svcCtx.Redis.Set(l.ctx, fmt.Sprintf("s:user:sessionId:%d", account.Id), fmt.Sprintf("%x", hash), 86400*7*time.Second)
+	return &user.LoginResp{
+		SessionId: fmt.Sprintf("%x", hash),
+	}, nil
 }
