@@ -37,7 +37,7 @@ func (m *customPostModel) withSession(session sqlx.Session) PostModel {
 }
 
 func (m *customPostModel) GetPostByUser(ctx context.Context, userId int64) ([]Post, error) {
-	query := fmt.Sprintf("select %s from %s where `user_id` = ? and `status` = 0", postRows, m.table)
+	query := fmt.Sprintf("select %s from %s where `user_id` = ? and `status` = 0 order by created_at desc", postRows, m.table)
 	var resp []Post
 	err := m.conn.QueryRowsCtx(ctx, &resp, query, userId)
 	if err != nil {
