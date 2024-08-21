@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package post;
+option go_package="./post";
+
+// 定义实体结构
+message PostData {
+  int64 Id = 1; // id
+  string Title = 2; // 标题
+  string Content = 3; // 内容
+  int64 UserId = 4; // 作者id
+  int64 Views = 5; // 查看数
+  int64 Likes = 6; // 喜欢数
+  int64 Comments = 7; // 评论数
+  int64 Shares = 8; // 分享数
+  int64 Collects = 9; // 收藏数
+
+}
+
+message CreatePostReq {
+  PostData PostData = 1;
+}
+
+message CreatePostResp {}
+
+message UpdatePostReq {
+  PostData PostData = 1;
+}
+
+message UpdatePostResp {}
+
+message DeletePostReq {
+  int64 PostId = 1;
+}
+
+message DeletePostResp {}
+
+message GetPostReq {
+  int64 PostId = 1;
+}
+
+message GetPostResp {
+  PostData Info = 1;
+}
+
+message BatchPostReq {
+  repeated int64 PostIds = 1;
+}
+
+message BatchPostResp {
+  repeated PostData Infos = 1;
+}
+
+message GetUserPostListReq {
+  int64 UserId = 1; // 用户ID
+}
+
+message GetUserPostListResp {
+  repeated PostData Infos = 1;
+}
+
+service Post {
+  // 发表推文
+  rpc CreatePost(CreatePostReq) returns(CreatePostResp);
+  // 更新推文
+  rpc UpdatePost(UpdatePostReq) returns(UpdatePostResp);
+  // 删除推文
+  rpc DeletePost(DeletePostReq) returns(DeletePostReq);
+  // 获取单条推文
+  rpc GetPost(GetPostReq) returns(GetPostResp);
+  // 批量获取推文
+  rpc BatchPost(BatchPostReq) returns(BatchPostResp);
+  // 用户用户推文列表
+  rpc GetUserPostList(GetUserPostListReq) returns(GetUserPostListResp);
+}

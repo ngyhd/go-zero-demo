@@ -1,0 +1,10 @@
+Name: user.rpc
+ListenOn: 0.0.0.0:8082
+Etcd:
+  Hosts:
+    - 127.0.0.1:2379
+  Key: user.rpc
+MysqlConf:
+  DataSource: root:123456@tcp(127.0.0.1:3306)/go_zero_demo?charset=utf8mb4&parseTime=True&loc=Local
+RedisConf:
+  Host: 127.0.0.1:6379
