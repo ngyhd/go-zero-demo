@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
-	"google.golang.org/grpc/status"
+	"go-zero-demo/pkg/xerr"
 	"time"
 
 	"go-zero-demo/post/internal/svc"
@@ -31,16 +31,16 @@ func NewDeletePostLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Delete
 func (l *DeletePostLogic) DeletePost(in *post.DeletePostReq) (*post.DeletePostReq, error) {
 	findOne, err := l.svcCtx.DB.Post.FindOne(l.ctx, in.GetPostId())
 	if err != nil && !errors.Is(err, sqlx.ErrNotFound) {
-		return nil, status.Error(500, "系统错误")
+		return nil, xerr.SystemErr.SetMessage(err.Error())
 	}
 	if findOne == nil {
-		return nil, status.Error(404, "推文不存在")
+		return nil, xerr.NotFoundErr.SetMessage("推文不存在")
 	}
 	findOne.Status = 1
 	findOne.DeletedAt = time.Now().Unix()
 	err = l.svcCtx.DB.Post.Update(l.ctx, findOne)
 	if err != nil {
-		return nil, status.Error(500, "系统错误")
+		return nil, xerr.SystemErr.SetMessage(err.Error())
 	}
 	return &post.DeletePostReq{}, nil
 }

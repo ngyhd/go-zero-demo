@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
-	"google.golang.org/grpc/status"
+	"go-zero-demo/pkg/xerr"
 	"time"
 
 	"go-zero-demo/post/internal/svc"
@@ -29,25 +29,25 @@ func NewUpdatePostLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Update
 
 // 更新推文
 func (l *UpdatePostLogic) UpdatePost(in *post.UpdatePostReq) (*post.UpdatePostResp, error) {
-	findedPost, err := l.svcCtx.DB.Post.FindOne(l.ctx, in.GetPostData().GetId())
+	findPost, err := l.svcCtx.DB.Post.FindOne(l.ctx, in.GetPostData().GetId())
 	if err != nil && !errors.Is(err, sqlx.ErrNotFound) {
-		return nil, status.Error(500, "系统错误")
+		return nil, xerr.SystemErr.SetMessage(err.Error())
 	}
-	if findedPost == nil {
-		return nil, status.Error(400, "推文不存在")
-	}
-
-	if findedPost.UserId != in.GetPostData().GetUserId() {
-		return nil, status.Error(400, "仅有作者可更新该推文")
+	if findPost == nil {
+		return nil, xerr.NotFoundErr.SetMessage("推文不存在")
 	}
 
-	findedPost.Title = in.GetPostData().GetTitle()
-	findedPost.Content = in.GetPostData().GetContent()
-	findedPost.UpdatedAt = time.Now().Unix()
+	if findPost.UserId != in.GetPostData().GetUserId() {
+		return nil, xerr.PostErr.SetMessage("仅有作者可更新该推文")
+	}
 
-	err = l.svcCtx.DB.Post.Update(l.ctx, findedPost)
+	findPost.Title = in.GetPostData().GetTitle()
+	findPost.Content = in.GetPostData().GetContent()
+	findPost.UpdatedAt = time.Now().Unix()
+
+	err = l.svcCtx.DB.Post.Update(l.ctx, findPost)
 	if err != nil {
-		return nil, status.Error(500, "系统错误")
+		return nil, xerr.SystemErr.SetMessage(err.Error())
 	}
 	return &post.UpdatePostResp{}, nil
 }

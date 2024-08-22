@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/zeromicro/go-zero/core/logx"
+	"go-zero-demo/pkg/interceptor"
 	"go-zero-demo/user/internal/config"
 	"go-zero-demo/user/internal/server"
 	"go-zero-demo/user/internal/svc"
@@ -33,6 +34,9 @@ func main() {
 			reflection.Register(grpcServer)
 		}
 	})
+	// 拦截器--记录错误日志
+	s.AddUnaryInterceptors(interceptor.Logger)
+
 	defer s.Stop()
 
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)

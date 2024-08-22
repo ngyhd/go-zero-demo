@@ -4,10 +4,9 @@ import (
 	"context"
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
-	"go-zero-demo/user/user"
-	"google.golang.org/grpc/status"
-
+	"go-zero-demo/pkg/xerr"
 	"go-zero-demo/user/internal/svc"
+	"go-zero-demo/user/user"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -31,9 +30,9 @@ func (l *GetUsersLogic) GetUsers(in *user.GetUsersReq) (*user.GetUsersResp, erro
 	findUser, err := l.svcCtx.DB.User.FindOne(l.ctx, in.GetUserId())
 	if err != nil {
 		if errors.Is(err, sqlx.ErrNotFound) {
-			return nil, status.Error(400, "账号不存在")
+			return nil, xerr.NotFoundErr.SetMessage("账号不存在")
 		} else {
-			return nil, status.Error(500, "系统错误")
+			return nil, xerr.SystemErr.SetMessage(err.Error())
 		}
 	}
 

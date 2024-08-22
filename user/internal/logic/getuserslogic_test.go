@@ -33,7 +33,7 @@ func TestGetUsersLogic_GetUsers(t *testing.T) {
 			},
 			args: args{
 				in: &user.GetUsersReq{
-					UserId: 12,
+					UserId: 1,
 				},
 			},
 			wantErr: false,

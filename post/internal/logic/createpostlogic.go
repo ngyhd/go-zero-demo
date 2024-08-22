@@ -2,8 +2,8 @@ package logic
 
 import (
 	"context"
+	"go-zero-demo/pkg/xerr"
 	"go-zero-demo/post/model"
-	"google.golang.org/grpc/status"
 	"time"
 
 	"go-zero-demo/post/internal/svc"
@@ -29,7 +29,7 @@ func NewCreatePostLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Create
 // 发表推文
 func (l *CreatePostLogic) CreatePost(in *post.CreatePostReq) (*post.CreatePostResp, error) {
 	if in.GetPostData().GetUserId() == 0 {
-		return nil, status.Error(400, "推文必须有作者")
+		return nil, xerr.PostErr.SetMessage("推文必须有作者")
 	}
 	data := model.Post{
 		Title:     in.GetPostData().GetTitle(),
@@ -48,7 +48,7 @@ func (l *CreatePostLogic) CreatePost(in *post.CreatePostReq) (*post.CreatePostRe
 
 	_, err := l.svcCtx.DB.Post.Insert(l.ctx, &data)
 	if err != nil {
-		return nil, status.Error(500, "系统错误")
+		return nil, xerr.SystemErr.SetMessage(err.Error())
 	}
 
 	return &post.CreatePostResp{}, nil

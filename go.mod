@@ -5,7 +5,9 @@ go 1.21.6
 require (
 	github.com/dlclark/regexp2 v1.11.4
 	github.com/go-sql-driver/mysql v1.8.1
+	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/pkg/errors v0.9.1
+	github.com/redis/go-redis/v9 v9.6.1
 	github.com/zeromicro/go-zero v1.7.0
 	google.golang.org/grpc v1.65.0
 	google.golang.org/protobuf v1.34.2
@@ -49,7 +51,6 @@ require (
 	github.com/prometheus/client_model v0.5.0 // indirect
 	github.com/prometheus/common v0.48.0 // indirect
 	github.com/prometheus/procfs v0.12.0 // indirect
-	github.com/redis/go-redis/v9 v9.6.1 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	go.etcd.io/etcd/api/v3 v3.5.15 // indirect
 	go.etcd.io/etcd/client/pkg/v3 v3.5.15 // indirect

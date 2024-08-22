@@ -4,8 +4,7 @@ import (
 	"context"
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
-	"google.golang.org/grpc/status"
-
+	"go-zero-demo/pkg/xerr"
 	"go-zero-demo/post/internal/svc"
 	"go-zero-demo/post/post"
 
@@ -30,10 +29,10 @@ func NewGetPostLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetPostLo
 func (l *GetPostLogic) GetPost(in *post.GetPostReq) (*post.GetPostResp, error) {
 	findOne, err := l.svcCtx.DB.Post.FindOne(l.ctx, in.GetPostId())
 	if err != nil && !errors.Is(err, sqlx.ErrNotFound) {
-		return nil, status.Error(500, "系统错误")
+		return nil, xerr.SystemErr.SetMessage(err.Error())
 	}
 	if findOne == nil || findOne.Status == 1 {
-		return nil, status.Error(400, "推文不存在")
+		return nil, xerr.NotFoundErr.SetMessage("推文不存在")
 	}
 	return &post.GetPostResp{
 		Info: &post.PostData{

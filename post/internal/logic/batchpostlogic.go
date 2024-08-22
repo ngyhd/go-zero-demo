@@ -2,8 +2,7 @@ package logic
 
 import (
 	"context"
-	"google.golang.org/grpc/status"
-
+	"go-zero-demo/pkg/xerr"
 	"go-zero-demo/post/internal/svc"
 	"go-zero-demo/post/post"
 
@@ -28,7 +27,7 @@ func NewBatchPostLogic(ctx context.Context, svcCtx *svc.ServiceContext) *BatchPo
 func (l *BatchPostLogic) BatchPost(in *post.BatchPostReq) (*post.BatchPostResp, error) {
 	posts, err := l.svcCtx.DB.Post.GetPostByIds(l.ctx, in.GetPostIds())
 	if err != nil {
-		return nil, status.Error(500, "系统错误")
+		return nil, xerr.SystemErr.SetMessage(err.Error())
 	}
 	infos := make([]*post.PostData, 0)
 	for _, p := range posts {

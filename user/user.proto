@@ -31,7 +31,6 @@ message LoginReq {
   string Password = 2; // 密码
 }
 message LoginResp {
-  string SessionId = 1; // 用户登录标识
 }
 
 message CancellationReq {
