@@ -1,0 +1,82 @@
+syntax = "v1"
+
+info (
+	title:   "api协议"
+	desc:    "v"
+	author:  "sean"
+	date:    "2024 年 8 月 26 日"
+	version: "v1"
+)
+
+type RegisterReq {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+type RegisterResp {
+	UserId string `json:"user_id"`
+}
+
+type LoginReq {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+type LoginResp {
+	Token string `json:"token"`
+}
+
+type GetUsersReq {
+	Ids string `json:"ids"` // 多个用户,号隔开
+}
+
+type UserInfo {
+	Id        string `json:"id"`
+	Avatar    string `json:"avatar"`
+	Nickname  string `json:"nickname"`
+	Account   string `json:"account"`
+	Password  string `json:"password"`
+	Bio       string `json:"bio"`
+	Gender    string `json:"gender"`
+	Region    string `json:"region"`
+	CreatedAt string `json:"created_at"`
+}
+
+type GetUsersResp {
+	Users []UserInfo `json:"users"`
+}
+
+type UpdateUserReq {
+	UserInfo
+}
+
+type UpdateUserResp {}
+
+@server (
+	jwt:     JwtAuth // 对当前 Bff 语法块下的所有路由，开启 jwt 认证，不需要则请删除此行
+	prefix:  /v1 // 对当前 Bff 语法块下的所有路由，新增 /v1 路由前缀，不需要则请删除此行
+	group:   user // 对当前 Bff 语法块下的所有路由，路由归并到 g1 目录下，不需要则请删除此行
+	timeout: 5s // 对当前 Bff 语法块下的所有路由进行超时配置，不需要则请删除此行
+)
+service Bff {
+	// 注册账号
+	@handler Register
+	post /register (RegisterReq) returns (RegisterResp)
+
+	// 登录
+	@handler Login
+	post /login (LoginReq) returns (LoginResp)
+
+	// 获取用户信息
+	@handler GetUsers
+	get /user/get (GetUsersReq) returns (GetUsersResp)
+
+	// 更新用户信息
+	@handler UpdateUser
+	post /user/update (UpdateUserReq) returns (UpdateUserResp)
+
+	// 注销
+	@handler Cancellation
+	post /cancellation (LoginReq) returns (LoginResp)
+}
+
