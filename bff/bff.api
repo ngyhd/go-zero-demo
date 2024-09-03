@@ -37,7 +37,7 @@ type UserInfo {
 	Account   string `json:"account"`
 	Password  string `json:"password"`
 	Bio       string `json:"bio"`
-	Gender    string `json:"gender"`
+	Gender    int64  `json:"gender"`
 	Region    string `json:"region"`
 	CreatedAt string `json:"created_at"`
 }
@@ -51,6 +51,12 @@ type UpdateUserReq {
 }
 
 type UpdateUserResp {}
+
+type CancellationReq {
+	UserId string `json:"user_id"`
+}
+
+type Cancellationresp {}
 
 @server (
 	jwt:     JwtAuth // 对当前 Bff 语法块下的所有路由，开启 jwt 认证，不需要则请删除此行
@@ -77,6 +83,82 @@ service Bff {
 
 	// 注销
 	@handler Cancellation
-	post /cancellation (LoginReq) returns (LoginResp)
+	post /cancellation returns (LoginResp)
+}
+
+type Post {
+	Id        string `json:"id"`
+	Title     string `json:"title"`
+	Content   string `json:"content"`
+	UserId    string `json:"user_id"`
+	Views     int64  `json:"views"`
+	Likes     int64  `json:"likes"`
+	Comments  int64  `json:"comments"`
+	Shares    int64  `json:"shares"`
+	Collects  int64  `json:"collects"`
+	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
+}
+
+type CreatePostReq {
+	Post
+}
+
+type CreatePostResp {}
+
+type UpdatePostReq {
+	Post
+}
+
+type UpdatePostResp {}
+
+type InfoReq {
+	Id string `json:"post_id"`
+}
+
+type InfoResp {
+	Post
+}
+
+type DeleteReq {
+	Id string `json:"post_id"`
+}
+
+type DeleteResp {}
+
+type GetUserPostsReq {
+	UserId string `json:"user_id"`
+}
+
+type GetUserPostsResp {
+	Posts []Post `json:"list"`
+}
+
+@server (
+	jwt:     JwtAuth // 对当前 Bff 语法块下的所有路由，开启 jwt 认证，不需要则请删除此行
+	prefix:  /v1 // 对当前 Bff 语法块下的所有路由，新增 /v1 路由前缀，不需要则请删除此行
+	group:   posts // 对当前 Bff 语法块下的所有路由，路由归并到 g1 目录下，不需要则请删除此行
+	timeout: 5s // 对当前 Bff 语法块下的所有路由进行超时配置，不需要则请删除此行
+)
+service Bff {
+	// 发表推文
+	@handler Creat
+	post /post/create (CreatePostReq) returns (CreatePostResp)
+
+	// 更新推文
+	@handler Update
+	post /post/Update (UpdatePostReq) returns (UpdatePostResp)
+
+	// 推文详情
+	@handler Info
+	post /post/Info (InfoReq) returns (InfoResp)
+
+	// 删除推文
+	@handler Delete
+	post /post/delete (DeleteReq) returns (DeleteResp)
+
+	// 获取用户推文列表
+	@handler GetUserPosts
+	post /post/getUserPosts (GetUserPostsReq) returns (GetUserPostsResp)
 }
 

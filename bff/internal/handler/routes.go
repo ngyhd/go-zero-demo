@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	posts "go-zero-demo/bff/internal/handler/posts"
 	user "go-zero-demo/bff/internal/handler/user"
 	"go-zero-demo/bff/internal/svc"
 
@@ -12,6 +13,39 @@ import (
 )
 
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/post/Info",
+				Handler: posts.InfoHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/post/Update",
+				Handler: posts.UpdateHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/post/create",
+				Handler: posts.CreatHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/post/delete",
+				Handler: posts.DeleteHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/post/getUserPosts",
+				Handler: posts.GetUserPostsHandler(serverCtx),
+			},
+		},
+		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
+		rest.WithPrefix("/v1"),
+		rest.WithTimeout(5000*time.Millisecond),
+	)
+
 	server.AddRoutes(
 		[]rest.Route{
 			{

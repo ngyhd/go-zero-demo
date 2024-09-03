@@ -13,7 +13,7 @@ message UserInfo {
   optional string Bio       = 6; // 个人简介 Biography
   int64 Gender     = 7; // 性别 0 女 1 男 2 未知
   string Region     = 8; // 地区
-  int64 Status     = 9; // 地区
+  int64 Status     = 9; // 状态
   int64 CreatedAt = 10; // 创建时间
   int64 UpdatedAt = 11; //更新时间
 }
@@ -39,10 +39,10 @@ message CancellationReq {
 message CancellationResp {}
 
 message GetUsersReq {
-  int64 UserId = 1; // 用户ID
+  repeated int64 UserIds = 1; // 用户ID
 }
 message GetUsersResp {
-  UserInfo UserInfo = 1;
+  repeated UserInfo UserInfo = 1;
 }
 
 message UpdateUserReq {

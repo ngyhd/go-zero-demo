@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"go-zero-demo/user/user"
 
 	"go-zero-demo/bff/internal/svc"
 	"go-zero-demo/bff/internal/types"
@@ -24,7 +25,13 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic 
 }
 
 func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginResp, err error) {
-	// todo: add your logic here and delete this line
-
+	reqData := &user.LoginReq{
+		Account:  req.Username,
+		Password: req.Password,
+	}
+	_, err = l.svcCtx.UserRpc.Login(l.ctx, reqData)
+	if err != nil {
+		return nil, err
+	}
 	return
 }

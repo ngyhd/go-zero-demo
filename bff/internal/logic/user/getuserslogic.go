@@ -2,6 +2,9 @@ package user
 
 import (
 	"context"
+	"github.com/gogf/gf/v2/util/gconv"
+	"go-zero-demo/user/user"
+	"strings"
 
 	"go-zero-demo/bff/internal/svc"
 	"go-zero-demo/bff/internal/types"
@@ -24,7 +27,12 @@ func NewGetUsersLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUsers
 }
 
 func (l *GetUsersLogic) GetUsers(req *types.GetUsersReq) (resp *types.GetUsersResp, err error) {
-	// todo: add your logic here and delete this line
-
+	reqData := &user.GetUsersReq{
+		UserIds: gconv.SliceInt64(strings.Split(req.Ids, ",")),
+	}
+	_, err = l.svcCtx.UserRpc.GetUsers(l.ctx, reqData)
+	if err != nil {
+		return nil, err
+	}
 	return
 }

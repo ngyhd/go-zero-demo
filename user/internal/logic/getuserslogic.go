@@ -27,30 +27,34 @@ func NewGetUsersLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUsers
 
 // 查用户信息
 func (l *GetUsersLogic) GetUsers(in *user.GetUsersReq) (*user.GetUsersResp, error) {
-	findUser, err := l.svcCtx.DB.User.FindOne(l.ctx, in.GetUserId())
-	if err != nil {
-		if errors.Is(err, sqlx.ErrNotFound) {
-			return nil, xerr.NotFoundErr.SetMessage("账号不存在")
-		} else {
-			return nil, xerr.SystemErr.SetMessage(err.Error())
+	respUsers := []*user.UserInfo{}
+	for _, uid := range in.GetUserIds() {
+		findUser, err := l.svcCtx.DB.User.FindOne(l.ctx, uid)
+		if err != nil {
+			if errors.Is(err, sqlx.ErrNotFound) {
+				return nil, xerr.NotFoundErr.SetMessage("账号不存在")
+			} else {
+				return nil, xerr.SystemErr.SetMessage(err.Error())
+			}
 		}
-	}
 
-	userInfo := user.UserInfo{
-		UserId:    findUser.Id,
-		Avatar:    findUser.Avatar,
-		Nickname:  findUser.Nickname,
-		Account:   findUser.Account,
-		Bio:       &findUser.Bio,
-		Gender:    findUser.Gender,
-		Region:    findUser.Region,
-		CreatedAt: findUser.CreatedAt,
-	}
-	if findUser.Status == 2 {
-		userInfo.Nickname = "已注销"
+		userInfo := user.UserInfo{
+			UserId:    findUser.Id,
+			Avatar:    findUser.Avatar,
+			Nickname:  findUser.Nickname,
+			Account:   findUser.Account,
+			Bio:       &findUser.Bio,
+			Gender:    findUser.Gender,
+			Region:    findUser.Region,
+			CreatedAt: findUser.CreatedAt,
+		}
+		if findUser.Status == 2 {
+			userInfo.Nickname = "已注销"
+		}
+		respUsers = append(respUsers, &userInfo)
 	}
 
 	return &user.GetUsersResp{
-		UserInfo: &userInfo,
+		UserInfo: respUsers,
 	}, nil
 }

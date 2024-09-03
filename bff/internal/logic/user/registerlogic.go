@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"go-zero-demo/user/user"
 
 	"go-zero-demo/bff/internal/svc"
 	"go-zero-demo/bff/internal/types"
@@ -24,7 +25,13 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 }
 
 func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterResp, err error) {
-	// todo: add your logic here and delete this line
-
+	reqData := &user.RegisterReq{
+		Account:  req.Username,
+		Password: req.Password,
+	}
+	_, err = l.svcCtx.UserRpc.Register(l.ctx, reqData)
+	if err != nil {
+		return nil, err
+	}
 	return
 }

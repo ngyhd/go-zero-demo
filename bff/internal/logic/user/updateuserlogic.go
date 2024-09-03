@@ -2,6 +2,8 @@ package user
 
 import (
 	"context"
+	"github.com/gogf/gf/v2/util/gconv"
+	"go-zero-demo/user/user"
 
 	"go-zero-demo/bff/internal/svc"
 	"go-zero-demo/bff/internal/types"
@@ -24,7 +26,19 @@ func NewUpdateUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Update
 }
 
 func (l *UpdateUserLogic) UpdateUser(req *types.UpdateUserReq) (resp *types.UpdateUserResp, err error) {
-	// todo: add your logic here and delete this line
-
+	reqData := &user.UpdateUserReq{
+		UserInfo: &user.UserInfo{
+			Avatar:   req.Avatar,
+			Nickname: req.Nickname,
+			Password: req.Password,
+			Bio:      gconv.PtrString(req.Bio),
+			Gender:   req.Gender,
+			Region:   req.Region,
+		},
+	}
+	_, err = l.svcCtx.UserRpc.UpdateUser(l.ctx, reqData)
+	if err != nil {
+		return nil, err
+	}
 	return
 }

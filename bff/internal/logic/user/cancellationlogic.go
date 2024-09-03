@@ -2,6 +2,8 @@ package user
 
 import (
 	"context"
+	"github.com/gogf/gf/v2/util/gconv"
+	"go-zero-demo/user/user"
 
 	"go-zero-demo/bff/internal/svc"
 	"go-zero-demo/bff/internal/types"
@@ -23,8 +25,13 @@ func NewCancellationLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Canc
 	}
 }
 
-func (l *CancellationLogic) Cancellation(req *types.LoginReq) (resp *types.LoginResp, err error) {
-	// todo: add your logic here and delete this line
-
+func (l *CancellationLogic) Cancellation(req *types.CancellationReq) (resp *types.LoginResp, err error) {
+	reqData := &user.CancellationReq{
+		UserId: gconv.Int64(req.UserId),
+	}
+	_, err = l.svcCtx.UserRpc.Cancellation(l.ctx, reqData)
+	if err != nil {
+		return nil, err
+	}
 	return
 }
