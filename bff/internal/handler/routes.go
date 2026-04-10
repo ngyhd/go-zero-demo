@@ -6,6 +6,7 @@ import (
 	"time"
 
 	posts "go-zero-demo/bff/internal/handler/posts"
+	system "go-zero-demo/bff/internal/handler/system"
 	user "go-zero-demo/bff/internal/handler/user"
 	"go-zero-demo/bff/internal/svc"
 
@@ -13,6 +14,25 @@ import (
 )
 
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
+	systemHandler := system.NewSystemHandler()
+	systemHandler.Version = Version
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodGet,
+				Path:    "/version",
+				Handler: systemHandler.VersionHandler,
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/health",
+				Handler: systemHandler.HealthHandler,
+			},
+		},
+		rest.WithPrefix("/v1"),
+	)
+
 	server.AddRoutes(
 		[]rest.Route{
 			{

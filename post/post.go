@@ -17,6 +17,7 @@ import (
 )
 
 var configFile = flag.String("f", "post/etc/post.yaml", "the config file")
+var Version = "dev"
 
 func main() {
 	flag.Parse()
