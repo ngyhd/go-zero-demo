@@ -23,28 +23,14 @@ func NewGetUserPostListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *G
 	}
 }
 
-// 用户用户推文列表
+// 用户推文列表
 func (l *GetUserPostListLogic) GetUserPostList(in *post.GetUserPostListReq) (*post.GetUserPostListResp, error) {
 	posts, err := l.svcCtx.DB.Post.GetPostByUser(l.ctx, in.GetUserId())
 	if err != nil {
 		return nil, xerr.SystemErr.SetMessage(err.Error())
 	}
-	infos := make([]*post.PostData, 0)
-	for _, p := range posts {
-		info := &post.PostData{
-			Id:       p.Id,
-			Title:    p.Title,
-			Content:  p.Content,
-			Views:    p.Views,
-			Likes:    p.Likes,
-			Comments: p.Comments,
-			Shares:   p.Shares,
-			Collects: p.Collects,
-		}
-		infos = append(infos, info)
-	}
 
 	return &post.GetUserPostListResp{
-		Infos: infos,
+		Infos: ConvertPostsToDataList(posts),
 	}, nil
 }

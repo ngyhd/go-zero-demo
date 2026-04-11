@@ -27,7 +27,7 @@ type PostClient interface {
 	// 更新推文
 	UpdatePost(ctx context.Context, in *UpdatePostReq, opts ...grpc.CallOption) (*UpdatePostResp, error)
 	// 删除推文
-	DeletePost(ctx context.Context, in *DeletePostReq, opts ...grpc.CallOption) (*DeletePostReq, error)
+	DeletePost(ctx context.Context, in *DeletePostReq, opts ...grpc.CallOption) (*DeletePostResp, error)
 	// 获取单条推文
 	GetPost(ctx context.Context, in *GetPostReq, opts ...grpc.CallOption) (*GetPostResp, error)
 	// 批量获取推文
@@ -62,8 +62,8 @@ func (c *postClient) UpdatePost(ctx context.Context, in *UpdatePostReq, opts ...
 	return out, nil
 }
 
-func (c *postClient) DeletePost(ctx context.Context, in *DeletePostReq, opts ...grpc.CallOption) (*DeletePostReq, error) {
-	out := new(DeletePostReq)
+func (c *postClient) DeletePost(ctx context.Context, in *DeletePostReq, opts ...grpc.CallOption) (*DeletePostResp, error) {
+	out := new(DeletePostResp)
 	err := c.cc.Invoke(ctx, "/post.Post/DeletePost", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -107,7 +107,7 @@ type PostServer interface {
 	// 更新推文
 	UpdatePost(context.Context, *UpdatePostReq) (*UpdatePostResp, error)
 	// 删除推文
-	DeletePost(context.Context, *DeletePostReq) (*DeletePostReq, error)
+	DeletePost(context.Context, *DeletePostReq) (*DeletePostResp, error)
 	// 获取单条推文
 	GetPost(context.Context, *GetPostReq) (*GetPostResp, error)
 	// 批量获取推文
@@ -127,7 +127,7 @@ func (UnimplementedPostServer) CreatePost(context.Context, *CreatePostReq) (*Cre
 func (UnimplementedPostServer) UpdatePost(context.Context, *UpdatePostReq) (*UpdatePostResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdatePost not implemented")
 }
-func (UnimplementedPostServer) DeletePost(context.Context, *DeletePostReq) (*DeletePostReq, error) {
+func (UnimplementedPostServer) DeletePost(context.Context, *DeletePostReq) (*DeletePostResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeletePost not implemented")
 }
 func (UnimplementedPostServer) GetPost(context.Context, *GetPostReq) (*GetPostResp, error) {

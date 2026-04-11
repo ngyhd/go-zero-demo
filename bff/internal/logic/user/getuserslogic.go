@@ -32,7 +32,7 @@ func (l *GetUsersLogic) GetUsers(req *types.GetUsersReq) (resp *types.GetUsersRe
 	}
 	_, err = l.svcCtx.UserRpc.GetUsers(l.ctx, reqData)
 	if err != nil {
-		return nil, err
+		return nil, svc.TranslateRpcError(err)
 	}
 	return
 }

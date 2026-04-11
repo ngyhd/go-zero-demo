@@ -35,7 +35,7 @@ func (s *PostServer) UpdatePost(ctx context.Context, in *post.UpdatePostReq) (*p
 }
 
 // 删除推文
-func (s *PostServer) DeletePost(ctx context.Context, in *post.DeletePostReq) (*post.DeletePostReq, error) {
+func (s *PostServer) DeletePost(ctx context.Context, in *post.DeletePostReq) (*post.DeletePostResp, error) {
 	l := logic.NewDeletePostLogic(ctx, s.svcCtx)
 	return l.DeletePost(in)
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
+	"go-zero-demo/pkg/consts"
 	"go-zero-demo/pkg/xerr"
 	"go-zero-demo/post/internal/svc"
 	"go-zero-demo/post/post"
@@ -31,20 +32,10 @@ func (l *GetPostLogic) GetPost(in *post.GetPostReq) (*post.GetPostResp, error) {
 	if err != nil && !errors.Is(err, sqlx.ErrNotFound) {
 		return nil, xerr.SystemErr.SetMessage(err.Error())
 	}
-	if findOne == nil || findOne.Status == 1 {
+	if findOne == nil || findOne.Status == consts.PostStatusDeleted {
 		return nil, xerr.NotFoundErr.SetMessage("推文不存在")
 	}
 	return &post.GetPostResp{
-		Info: &post.PostData{
-			Id:       findOne.Id,
-			UserId:   findOne.UserId,
-			Title:    findOne.Title,
-			Content:  findOne.Content,
-			Views:    findOne.Views,
-			Likes:    findOne.Likes,
-			Comments: findOne.Comments,
-			Shares:   findOne.Shares,
-			Collects: findOne.Collects,
-		},
+		Info: ConvertPostToData(findOne),
 	}, nil
 }

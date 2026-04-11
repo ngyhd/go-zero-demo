@@ -31,7 +31,7 @@ func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginResp, err erro
 	}
 	_, err = l.svcCtx.UserRpc.Login(l.ctx, reqData)
 	if err != nil {
-		return nil, err
+		return nil, svc.TranslateRpcError(err)
 	}
 	return
 }

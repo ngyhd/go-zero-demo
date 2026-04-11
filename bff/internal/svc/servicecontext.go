@@ -4,6 +4,7 @@ import (
 	"go-zero-demo/bff/internal/config"
 	"go-zero-demo/post/post"
 	"go-zero-demo/user/user"
+	"github.com/zeromicro/go-zero/zrpc"
 )
 
 type ServiceContext struct {
@@ -14,8 +15,8 @@ type ServiceContext struct {
 
 func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
-		Config: c,
-		//PostRpc: post.NewPostClient(zrpc.MustNewClient(c.PostRpcConf).Conn()),
-		//UserRpc: user.NewUserClient(zrpc.MustNewClient(c.UserRpcConf).Conn()),
+		Config:  c,
+		UserRpc: user.NewUserClient(zrpc.MustNewClient(c.UserRpcConf).Conn()),
+		PostRpc: post.NewPostClient(zrpc.MustNewClient(c.PostRpcConf).Conn()),
 	}
 }

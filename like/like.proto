@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package like;
+option go_package="./like";
+
+message LikeReq {
+  int64 UserId = 1;  // 用户ID
+  int64 PostId = 2;  // 推文ID
+}
+
+message LikeResp {
+}
+
+message UnlikeReq {
+  int64 UserId = 1;  // 用户ID
+  int64 PostId = 2;  // 推文ID
+}
+
+message UnlikeResp {
+}
+
+message GetLikersReq {
+  int64 PostId = 1;  // 推文ID
+}
+
+message GetLikersResp {
+  repeated LikersInfo Infos = 1;
+}
+
+message LikersInfo {
+  int64 UserId = 1;
+  int64 PostId = 2;
+  string Nickname = 3;
+  string Avatar = 4;
+  int64 CreatedAt = 5;
+}
+
+service Like {
+  // 点赞
+  rpc Like(LikeReq) returns(LikeResp);
+  // 取消点赞
+  rpc Unlike(UnlikeReq) returns(UnlikeResp);
+  // 获取推文点赞列表
+  rpc GetLikers(GetLikersReq) returns(GetLikersResp);
+}

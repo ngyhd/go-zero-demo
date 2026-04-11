@@ -29,23 +29,8 @@ func (l *BatchPostLogic) BatchPost(in *post.BatchPostReq) (*post.BatchPostResp, 
 	if err != nil {
 		return nil, xerr.SystemErr.SetMessage(err.Error())
 	}
-	infos := make([]*post.PostData, 0)
-	for _, p := range posts {
-		info := &post.PostData{
-			Id:       p.Id,
-			UserId:   p.UserId,
-			Title:    p.Title,
-			Content:  p.Content,
-			Views:    p.Views,
-			Likes:    p.Likes,
-			Comments: p.Comments,
-			Shares:   p.Shares,
-			Collects: p.Collects,
-		}
-		infos = append(infos, info)
-	}
 
 	return &post.BatchPostResp{
-		Infos: infos,
+		Infos: ConvertPostsToDataList(posts),
 	}, nil
 }

@@ -53,17 +53,31 @@ func New(code int64, msg string) BusinessError {
 
 // 通用错误
 var (
-	NotFoundErr = New(400000, "数据不存在")
+	NotFoundErr    = New(400000, "数据不存在")
+	SystemErr      = New(400001, "系统错误")
+	ParamErr       = New(400002, "参数错误")
+	UnauthorizedErr = New(400003, "未授权")
 )
 
 // 用户服务错误
 var (
-	// 用户服务通用错误码
-	AccountErr = New(400100, "业务错误")
+	// 用户相关错误码 (40xxxx)
+	AccountErr          = New(401000, "账号错误")
+	AccountNotFoundErr  = New(401001, "账号不存在")
+	AccountExistsErr    = New(401002, "账号已存在")
+	PasswordErr         = New(401003, "密码错误")
+	PasswordFormatErr   = New(401004, "密码格式不匹配")
+	AccountFormatErr    = New(401005, "账号格式不匹配")
+	NoPermissionErr    = New(401006, "无权限操作")
+	UserDisabledErr     = New(401007, "账号已注销")
 )
 
 // 推文服务错误
 var (
-	// 推文服务通用错误码
-	PostErr = New(400200, "业务错误")
+	// 推文相关错误码 (42xxxx)
+	PostErr          = New(422000, "推文错误")
+	PostNotFoundErr  = New(422001, "推文不存在")
+	PostTitleErr     = New(422002, "推文标题不能为空")
+	PostContentErr    = New(422003, "推文内容不能为空")
+	NoPostPermissionErr = New(422004, "无权操作此推文")
 )

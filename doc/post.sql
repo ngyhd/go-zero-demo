@@ -17,3 +17,8 @@ create table post
 )
     comment '推文表' collate = utf8mb4_bin;
 
+-- 索引
+create index idx_post_user_id on post(user_id);
+create index idx_post_status on post(status);
+create index idx_post_user_created on post(user_id, status, created_at desc);
+

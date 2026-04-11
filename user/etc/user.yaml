@@ -2,11 +2,18 @@ Name: user.rpc
 ListenOn: 0.0.0.0:8081
 Etcd:
   Hosts:
-  - 127.0.0.1:2379
+    - ${ETCD_HOST:127.0.0.1:2379}
   Key: user.rpc
 MysqlConf:
-  DataSource: root:123456@tcp(127.0.0.1:3306)/go_zero_demo?charset=utf8mb4&parseTime=True&loc=Local
+  DataSource: ${DB_DSN}
 RedisConf:
-  Host: 127.0.0.1:6379
+  Host: ${REDIS_HOST:127.0.0.1:6379}
+  Password: ${REDIS_PASSWORD:}
+  DialTimeout: 5000
+  ReadTimeout: 3000
+  WriteTimeout: 3000
+JwtAuth:
+  AccessSecret: ${JWT_SECRET:your-secret-key}
+  AccessExpire: ${JWT_EXPIRE:86400}
 DevServer:
   Enabled: true

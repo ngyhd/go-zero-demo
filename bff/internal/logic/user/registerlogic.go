@@ -31,7 +31,7 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 	}
 	_, err = l.svcCtx.UserRpc.Register(l.ctx, reqData)
 	if err != nil {
-		return nil, err
+		return nil, svc.TranslateRpcError(err)
 	}
 	return
 }

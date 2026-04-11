@@ -29,6 +29,11 @@ func NewUpdateUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Update
 
 // 更新用户信息
 func (l *UpdateUserLogic) UpdateUser(in *user.UpdateUserReq) (*user.UpdateUserResp, error) {
+	// 权限校验：只能修改自己的信息
+	if in.GetCurrentUserId() != in.GetUserInfo().GetUserId() {
+		return nil, xerr.AccountErr.SetMessage("无权修改此用户信息")
+	}
+
 	findOne, err := l.svcCtx.DB.User.FindOne(l.ctx, in.GetUserInfo().GetUserId())
 	if err != nil {
 		if errors.Is(err, sqlx.ErrNotFound) {
@@ -41,7 +46,7 @@ func (l *UpdateUserLogic) UpdateUser(in *user.UpdateUserReq) (*user.UpdateUserRe
 		findOne.Avatar = in.GetUserInfo().GetAvatar()
 	}
 	if in.GetUserInfo().GetNickname() != "" {
-		findOne.Avatar = in.GetUserInfo().GetNickname()
+		findOne.Nickname = in.GetUserInfo().GetNickname()
 	}
 
 	if in.GetUserInfo().Bio != nil {

@@ -33,7 +33,7 @@ type (
 		// 更新推文
 		UpdatePost(ctx context.Context, in *UpdatePostReq, opts ...grpc.CallOption) (*UpdatePostResp, error)
 		// 删除推文
-		DeletePost(ctx context.Context, in *DeletePostReq, opts ...grpc.CallOption) (*DeletePostReq, error)
+		DeletePost(ctx context.Context, in *DeletePostReq, opts ...grpc.CallOption) (*DeletePostResp, error)
 		// 获取单条推文
 		GetPost(ctx context.Context, in *GetPostReq, opts ...grpc.CallOption) (*GetPostResp, error)
 		// 批量获取推文
@@ -66,7 +66,7 @@ func (m *defaultPost) UpdatePost(ctx context.Context, in *UpdatePostReq, opts ..
 }
 
 // 删除推文
-func (m *defaultPost) DeletePost(ctx context.Context, in *DeletePostReq, opts ...grpc.CallOption) (*DeletePostReq, error) {
+func (m *defaultPost) DeletePost(ctx context.Context, in *DeletePostReq, opts ...grpc.CallOption) (*DeletePostResp, error) {
 	client := post.NewPostClient(m.cli.Conn())
 	return client.DeletePost(ctx, in, opts...)
 }

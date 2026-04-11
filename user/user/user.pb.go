@@ -308,6 +308,9 @@ type LoginResp struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
+
+	Token  string `protobuf:"bytes,1,opt,name=Token,proto3" json:"Token,omitempty"`
+	UserId int64  `protobuf:"varint,2,opt,name=UserId,proto3" json:"UserId,omitempty"`
 }
 
 func (x *LoginResp) Reset() {
@@ -340,6 +343,20 @@ func (x *LoginResp) ProtoReflect() protoreflect.Message {
 // Deprecated: Use LoginResp.ProtoReflect.Descriptor instead.
 func (*LoginResp) Descriptor() ([]byte, []int) {
 	return file_user_user_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *LoginResp) GetToken() string {
+	if x != nil {
+		return x.Token
+	}
+	return ""
+}
+
+func (x *LoginResp) GetUserId() int64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
 }
 
 type CancellationReq struct {
@@ -526,7 +543,8 @@ type UpdateUserReq struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserInfo *UserInfo `protobuf:"bytes,1,opt,name=UserInfo,proto3" json:"UserInfo,omitempty"`
+	UserInfo       *UserInfo `protobuf:"bytes,1,opt,name=UserInfo,proto3" json:"UserInfo,omitempty"`
+	CurrentUserId  int64     `protobuf:"varint,2,opt,name=CurrentUserId,proto3" json:"CurrentUserId,omitempty"`
 }
 
 func (x *UpdateUserReq) Reset() {
@@ -566,6 +584,13 @@ func (x *UpdateUserReq) GetUserInfo() *UserInfo {
 		return x.UserInfo
 	}
 	return nil
+}
+
+func (x *UpdateUserReq) GetCurrentUserId() int64 {
+	if x != nil {
+		return x.CurrentUserId
+	}
+	return 0
 }
 
 type UpdateUserResp struct {

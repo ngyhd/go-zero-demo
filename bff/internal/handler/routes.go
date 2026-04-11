@@ -14,8 +14,8 @@ import (
 )
 
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
-	systemHandler := system.NewSystemHandler()
-	systemHandler.Version = Version
+	systemHandler := system.NewSystemHandler(serverCtx)
+	uploadHandler := NewUploadHandler()
 
 	server.AddRoutes(
 		[]rest.Route{
@@ -28,6 +28,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Method:  http.MethodGet,
 				Path:    "/health",
 				Handler: systemHandler.HealthHandler,
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/upload",
+				Handler: uploadHandler.UploadHandler,
 			},
 		},
 		rest.WithPrefix("/v1"),

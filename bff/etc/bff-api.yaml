@@ -2,6 +2,20 @@ Name: bff-api
 Host: 0.0.0.0
 Port: 8888
 JwtAuth:
-  AccessSecret: uOvKLmVfztaXGpNYd4Z0I1SiT7MweJhl
-  AccessExpire: 86400
+  AccessSecret: ${JWT_SECRET}
+  AccessExpire: ${JWT_EXPIRE:86400}
+UserRpcConf:
+  Etcd:
+    Hosts:
+      - ${ETCD_HOST:127.0.0.1:2379}
+    Key: user.rpc
+  Timeout: 5000
+  NonBlock: true
+PostRpcConf:
+  Etcd:
+    Hosts:
+      - ${ETCD_HOST:127.0.0.1:2379}
+    Key: post.rpc
+  Timeout: 5000
+  NonBlock: true
 DevServer:

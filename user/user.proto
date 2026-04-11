@@ -9,13 +9,12 @@ message UserInfo {
   string Avatar = 2;     // 头像链接地址
   string Nickname  = 3;  // 昵称
   string Account    = 4; // 账号
-  string Password  = 5; // 密码
-  optional string Bio       = 6; // 个人简介 Biography
-  int64 Gender     = 7; // 性别 0 女 1 男 2 未知
-  string Region     = 8; // 地区
-  int64 Status     = 9; // 状态
-  int64 CreatedAt = 10; // 创建时间
-  int64 UpdatedAt = 11; //更新时间
+  optional string Bio       = 5; // 个人简介 Biography
+  int64 Gender     = 6; // 性别 0 女 1 男 2 未知
+  string Region     = 7; // 地区
+  int64 Status     = 8; // 状态
+  int64 CreatedAt = 9; // 创建时间
+  int64 UpdatedAt = 10; //更新时间
 }
 
 message RegisterReq {
@@ -31,6 +30,8 @@ message LoginReq {
   string Password = 2; // 密码
 }
 message LoginResp {
+  string Token = 1; // JWT Token
+  int64 UserId = 2;  // 用户ID
 }
 
 message CancellationReq {
@@ -47,6 +48,7 @@ message GetUsersResp {
 
 message UpdateUserReq {
   UserInfo UserInfo = 1;
+  int64 CurrentUserId = 2; // 当前登录用户ID，用于权限校验
 }
 message UpdateUserResp {}
 

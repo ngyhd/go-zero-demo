@@ -1,0 +1,14 @@
+Name: like.rpc
+ListenOn: 0.0.0.0:8083
+Etcd:
+  Hosts:
+    - ${ETCD_HOST:127.0.0.1:2379}
+  Key: like.rpc
+MysqlConf:
+  DataSource: ${DB_DSN}
+RedisConf:
+  Host: ${REDIS_HOST:127.0.0.1:6379}
+  Password: ${REDIS_PASSWORD:}
+  DialTimeout: 5000
+  ReadTimeout: 3000
+  WriteTimeout: 3000
